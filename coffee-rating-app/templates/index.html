@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Coffee Rating App</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<h1>Coffee Rating Application</h1>
+
+<div id="coffee-list">
+    {% for coffee in coffees %}
+    <div class="coffee-item">
+        <h3>{{ coffee[1] }}</h3>
+        <p>Votes: <span id="votes-{{ coffee[0] }}">{{ coffee[2] }}</span></p>
+        <button onclick="vote({{ coffee[0] }})">Vote</button>
+    </div>
+    {% endfor %}
+</div>
+
+<script>
+function vote(id) {
+    fetch('/vote', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({id: id})
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('votes-' + id).innerText = data.votes;
+    });
+}
+</script>
+
+</body>
+</html>
